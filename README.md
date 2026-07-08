@@ -161,3 +161,4 @@ MindMirror replaces boring sliders with an empathetic AI assistant. Using standa
 - Speech biomarker analysis to monitor vocal indicators of depressive onset.
 - Personalized ML baseline drift models that raise warnings based on individual standard deviations rather than fixed scoring cutoffs.
 # MindMirror
+# MindMirror
