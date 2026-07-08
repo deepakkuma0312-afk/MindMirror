@@ -30,10 +30,24 @@ export function middleware(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
+  let supabaseProjectId = '';
+  if (isSupabaseConfigured) {
+    try {
+      const urlObj = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
+      supabaseProjectId = urlObj.hostname.split('.')[0];
+    } catch (e) {
+      const match = process.env.NEXT_PUBLIC_SUPABASE_URL!.match(/https:\/\/([a-z0-9\-]+)\.supabase\./i);
+      if (match) {
+        supabaseProjectId = match[1];
+      }
+    }
+  }
+
   // Get session status from cookies
   // Supports both Supabase token cookies and our local session cookie
   const mockSession = request.cookies.get('mindmirror-session')?.value;
-  const sbSession = isSupabaseConfigured && request.cookies.getAll().some(c => c.name.startsWith('sb-'));
+  const sbCookiePrefix = supabaseProjectId ? `sb-${supabaseProjectId}-` : 'sb-';
+  const sbSession = isSupabaseConfigured && request.cookies.getAll().some(c => c.name.startsWith(sbCookiePrefix));
   const hasSession = !!(mockSession || sbSession);
 
   // If no session and trying to access protected content
