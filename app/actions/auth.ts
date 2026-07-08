@@ -14,10 +14,10 @@ export async function loginAction(formData: FormData) {
     return { error: 'Please enter both email and password.' };
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   if (isSupabaseConfigured) {
-    const supabase = getServerSupabase();
+    const supabase = await getServerSupabase();
     if (!supabase) return { error: 'Auth system unavailable.' };
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -64,10 +64,10 @@ export async function signupAction(formData: FormData) {
     return { error: 'Please fill in all fields.' };
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   if (isSupabaseConfigured) {
-    const supabase = getServerSupabase();
+    const supabase = await getServerSupabase();
     if (!supabase) return { error: 'Auth system unavailable.' };
 
     const { data, error } = await supabase.auth.signUp({
@@ -112,7 +112,7 @@ export async function onboardingAction(role: 'patient' | 'therapist') {
     return { error: 'No active session found.' };
   }
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   // Update user role in DB
   await updateUser(user.id, { role });
@@ -129,10 +129,10 @@ export async function onboardingAction(role: 'patient' | 'therapist') {
 }
 
 export async function logoutAction() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   if (isSupabaseConfigured) {
-    const supabase = getServerSupabase();
+    const supabase = await getServerSupabase();
     if (supabase) {
       await supabase.auth.signOut();
     }

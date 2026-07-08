@@ -17,10 +17,10 @@ export function getBrowserClient() {
 }
 
 // Server client creator for Route Handlers and Server Actions
-export function getServerSupabase() {
+export async function getServerSupabase() {
   if (!isSupabaseConfigured) return null;
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -51,10 +51,10 @@ export function getServerSupabase() {
 
 // Helper to get currently logged in user (works with both Supabase and local mock)
 export async function getSessionUser() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   
   if (isSupabaseConfigured) {
-    const supabase = getServerSupabase();
+    const supabase = await getServerSupabase();
     if (!supabase) return null;
     try {
       const { data: { user } } = await supabase.auth.getUser();

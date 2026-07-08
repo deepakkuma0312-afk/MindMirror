@@ -75,7 +75,7 @@ export async function deleteUserDataAction() {
     }
 
     // Clear authentication cookies
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     cookieStore.delete('mindmirror-session');
     cookieStore.delete('mindmirror-role');
   } catch (error) {
