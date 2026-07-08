@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getMoodEntries } from '@/lib/db/dbHelper';
 import { decrypt, formatClinicalNote } from '@/lib/utils/encryption';
 import JournalForm from '@/components/journal/JournalForm';

@@ -37,6 +37,16 @@
       "timezone": "UTC",
       "clinicalNotes": null,
       "createdAt": "2026-07-08T17:11:18.598Z"
+    },
+    {
+      "id": "usr_21p3qrefe",
+      "email": "deepak20060312@gmail.com",
+      "name": "deepak kumawat",
+      "role": "patient",
+      "therapistId": null,
+      "timezone": "UTC",
+      "clinicalNotes": null,
+      "createdAt": "2026-07-08T19:46:36.024Z"
     }
   ],
   "moodEntries": [
@@ -494,6 +504,22 @@
       "note": "Feeling much better. Inserted breaks at work and slept well.",
       "source": "manual",
       "createdAt": "2026-07-08T13:05:57.715Z"
+    },
+    {
+      "id": "cbb56583-29d5-4863-8aff-b2e9df9c34a5",
+      "userId": "usr_w6cskblhp",
+      "moodScore": 4,
+      "energy": 2,
+      "sleepHours": 5,
+      "tags": [
+        "work",
+        "sleep",
+        "relationships",
+        "health"
+      ],
+      "note": "Areas you're struggling with: Work • Sleep • Relationships • Physical Health",
+      "source": "ai",
+      "createdAt": "2026-07-08T19:50:36.417Z"
     }
   ],
   "assessments": [
@@ -636,6 +662,27 @@
       "sentimentScore": 0.9,
       "crisisFlagged": false,
       "createdAt": "2026-07-06T13:05:57.716Z"
+    },
+    {
+      "id": "2dc4c89d-de67-4ccd-b557-c6708447b7aa",
+      "userId": "usr_w6cskblhp",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. Today (Thursday), let's look at your Basic Health. How did you sleep last night, and how is your physical energy level today?\"},{\"role\":\"user\",\"content\":\"5\"},{\"role\":\"assistant\",\"content\":\"Got it. Reflecting on today, did physical fatigue, appetite changes, or any physical pain play a major role in how you are feeling?\"},{\"role\":\"user\",\"content\":\"not\"},{\"role\":\"assistant\",\"content\":\"Got it. Reflecting on today, what do you think is the biggest driver or trigger behind how you are feeling? Is there anything specific (like work, relationships, or health) that stands out?\"},{\"role\":\"user\",\"content\":\"health\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (4/10), energy (2/10), sleep (5 hrs), and focus areas (Work, Sleep, Relationships, Physical Health). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 4,
+        "energy": 2,
+        "sleep_hours": 5,
+        "anxiety": 7,
+        "tags": [
+          "work",
+          "sleep",
+          "relationships",
+          "health"
+        ],
+        "summary": "Areas you're struggling with: Work • Sleep • Relationships • Physical Health"
+      },
+      "sentimentScore": 0.4,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T19:50:36.422Z"
     }
   ],
   "alerts": [

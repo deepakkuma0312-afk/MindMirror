@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getMoodEntries, getInsights, addInsight, getAssessments } from '@/lib/db/dbHelper';
 import { generateText } from 'ai';
 import { createGoogle } from '@ai-sdk/google';

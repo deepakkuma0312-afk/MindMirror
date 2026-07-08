@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getUser, getMoodEntries, getAssessments, getInsights } from '@/lib/db/dbHelper';
 import { renderToBuffer } from '@react-pdf/renderer';
 import React from 'react';

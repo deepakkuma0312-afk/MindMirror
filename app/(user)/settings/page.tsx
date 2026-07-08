@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getUser } from '@/lib/db/dbHelper';
 import LinkTherapistForm from '@/components/settings/LinkTherapistForm';
 import DeleteDataForm from '@/components/settings/DeleteDataForm';

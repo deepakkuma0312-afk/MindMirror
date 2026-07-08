@@ -2,9 +2,10 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { isSupabaseConfigured, getServerSupabase, getSessionUser } from '@/lib/auth/supabase';
+import { isAppwriteConfigured, createAdminClient, createSessionClient, getSessionUser } from '@/lib/auth/appwrite';
 import { getUserByEmail, createUser, updateUser, getUser } from '@/lib/db/dbHelper';
 import { redirect } from 'next/navigation';
+import { ID } from 'node-appwrite';
 
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string;
@@ -16,26 +17,31 @@ export async function loginAction(formData: FormData) {
 
   const cookieStore = await cookies();
 
-  if (isSupabaseConfigured) {
-    const supabase = await getServerSupabase();
-    if (!supabase) return { error: 'Auth system unavailable.' };
+  if (isAppwriteConfigured) {
+    const appwrite = await createAdminClient();
+    if (!appwrite) return { error: 'Auth system unavailable.' };
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const session = await appwrite.account.createEmailPasswordSession(email, password);
 
-    if (error) {
-      return { error: error.message };
-    }
+      // Store Appwrite session secret in cookie
+      cookieStore.set('appwrite-session', session.secret, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        expires: new Date(session.expire),
+      });
 
-    if (data.user) {
-      // Get role from DB profile
-      const dbUser = await getUser(data.user.id);
+      // Get user role from DB profile
+      const dbUser = await getUser(session.userId);
       const role = dbUser?.role || '';
       if (role) {
         cookieStore.set('mindmirror-role', role, { path: '/' });
       }
+    } catch (error: any) {
+      console.error('Appwrite login action error:', error);
+      return { error: error.message || 'Invalid email or password.' };
     }
   } else {
     // Local mock auth mode
@@ -66,25 +72,31 @@ export async function signupAction(formData: FormData) {
 
   const cookieStore = await cookies();
 
-  if (isSupabaseConfigured) {
-    const supabase = await getServerSupabase();
-    if (!supabase) return { error: 'Auth system unavailable.' };
+  if (isAppwriteConfigured) {
+    const appwrite = await createAdminClient();
+    if (!appwrite) return { error: 'Auth system unavailable.' };
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name },
-      },
-    });
+    try {
+      const userId = ID.unique();
+      await appwrite.account.create(userId, email, password, name);
 
-    if (error) {
-      return { error: error.message };
-    }
+      // Create session immediately
+      const session = await appwrite.account.createEmailPasswordSession(email, password);
 
-    if (data.user) {
+      // Store Appwrite session secret in cookie
+      cookieStore.set('appwrite-session', session.secret, {
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        expires: new Date(session.expire),
+      });
+
       // Create user profile in db
-      await createUser(data.user.id, email, name, 'patient'); // default to patient, onboarding changes it
+      await createUser(userId, email, name, 'patient'); // default to patient, onboarding changes it
+    } catch (error: any) {
+      console.error('Appwrite signup action error:', error);
+      return { error: error.message || 'Registration failed.' };
     }
   } else {
     // Local mock auth mode
@@ -115,7 +127,16 @@ export async function onboardingAction(role: 'patient' | 'therapist') {
   const cookieStore = await cookies();
 
   // Update user role in DB
-  await updateUser(user.id, { role });
+  try {
+    await updateUser(user.id, { role });
+  } catch (err) {
+    try {
+      // Fallback: if the user document doesn't exist in the database (e.g. because they signed up when tables weren't ready), create it now.
+      await createUser(user.id, user.email, '', role);
+    } catch (createErr) {
+      console.error('Failed to create user profile during onboarding fallback:', createErr);
+    }
+  }
 
   // Update role cookie
   cookieStore.set('mindmirror-role', role, { path: '/' });
@@ -131,14 +152,19 @@ export async function onboardingAction(role: 'patient' | 'therapist') {
 export async function logoutAction() {
   const cookieStore = await cookies();
 
-  if (isSupabaseConfigured) {
-    const supabase = await getServerSupabase();
-    if (supabase) {
-      await supabase.auth.signOut();
+  if (isAppwriteConfigured) {
+    const sessionClient = await createSessionClient();
+    if (sessionClient) {
+      try {
+        await sessionClient.account.deleteSession('current');
+      } catch (e) {
+        console.error('Appwrite delete session failed:', e);
+      }
     }
   }
 
-  // Clear mock session cookies
+  // Clear session cookies
+  cookieStore.delete('appwrite-session');
   cookieStore.delete('mindmirror-session');
   cookieStore.delete('mindmirror-role');
 

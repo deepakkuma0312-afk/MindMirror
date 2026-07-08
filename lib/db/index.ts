@@ -1,14 +1,5 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as schema from './schema';
 import fs from 'fs';
 import path from 'path';
-
-const connectionString = process.env.DATABASE_URL;
-
-// Drizzle PG Client setup
-export const client = connectionString ? postgres(connectionString, { max: 1 }) : null;
-export const db = client ? drizzle(client, { schema }) : null;
 
 // JSON File database fallback logic
 const MOCK_DB_PATH = path.join(process.cwd(), 'data', 'mock_db.json');
@@ -62,6 +53,6 @@ export function writeMockData(data: any) {
   try {
     fs.writeFileSync(MOCK_DB_PATH, JSON.stringify(data, null, 2));
   } catch (error) {
-    console.error('Error writing to mock database:', error);
+    console.error('Error writing mock database:', error);
   }
 }

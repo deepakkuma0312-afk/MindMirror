@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getUser, getMoodEntries, getAssessments, getInsights } from '@/lib/db/dbHelper';
 import { saveSessionNoteAction } from '@/app/actions/therapist';
 import MoodTrend from '@/components/charts/MoodTrend';

@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getUser } from '@/lib/db/dbHelper';
 import Sidebar from '@/components/shared/Sidebar';
 import { redirect } from 'next/navigation';

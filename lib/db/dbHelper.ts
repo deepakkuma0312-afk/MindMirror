@@ -1,6 +1,6 @@
-import { db, getMockData, writeMockData } from './index';
-import * as schema from './schema';
-import { eq, desc, and, gte } from 'drizzle-orm';
+import { getMockData, writeMockData } from './index';
+import { Client, TablesDB, Query } from 'node-appwrite';
+
 // Custom UUID generator to avoid package dependencies
 const uuidv4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -10,7 +10,7 @@ const uuidv4 = () => {
   });
 };
 
-// Helper to standardise Dates from JSON
+// Helper to standardise Dates from JSON / Database
 const parseDate = (val: any) => (val ? new Date(val) : new Date());
 
 // Type interfaces for exports
@@ -86,13 +86,118 @@ export interface TherapistLink {
   createdAt: Date;
 }
 
+// Appwrite Configuration
+const isAppwriteConfigured = !!(
+  process.env.APPWRITE_ENDPOINT &&
+  process.env.APPWRITE_PROJECT_ID &&
+  process.env.APPWRITE_DATABASE_ID &&
+  process.env.APPWRITE_API_KEY &&
+  process.env.APPWRITE_USERS_TABLE_ID
+);
+
+let appwriteTables: TablesDB | null = null;
+
+if (isAppwriteConfigured) {
+  const client = new Client()
+    .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+    .setProject(process.env.APPWRITE_PROJECT_ID!)
+    .setKey(process.env.APPWRITE_API_KEY!);
+  appwriteTables = new TablesDB(client);
+}
+
+const databaseId = process.env.APPWRITE_DATABASE_ID || '';
+const usersTableId = process.env.APPWRITE_USERS_TABLE_ID || '';
+const moodEntriesTableId = process.env.APPWRITE_MOOD_ENTRIES_TABLE_ID || '';
+const aiConversationsTableId = process.env.APPWRITE_AI_CONVERSATIONS_TABLE_ID || '';
+const assessmentsTableId = process.env.APPWRITE_ASSESSMENTS_TABLE_ID || '';
+const insightsTableId = process.env.APPWRITE_INSIGHTS_TABLE_ID || '';
+const alertsTableId = process.env.APPWRITE_ALERTS_TABLE_ID || '';
+const therapistLinksTableId = process.env.APPWRITE_THERAPIST_LINKS_TABLE_ID || '';
+
+// Appwrite mapper helpers
+const mapUserDoc = (doc: any): User => ({
+  id: doc.$id,
+  email: doc.email,
+  name: doc.name || null,
+  role: doc.role,
+  therapistId: doc.therapistId || null,
+  timezone: doc.timezone || 'UTC',
+  clinicalNotes: doc.clinicalNotes || null,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapMoodDoc = (doc: any): MoodEntry => ({
+  id: doc.$id,
+  userId: doc.userId,
+  moodScore: doc.moodScore,
+  energy: doc.energy,
+  sleepHours: doc.sleepHours !== undefined ? doc.sleepHours : null,
+  tags: typeof doc.tags === 'string' ? JSON.parse(doc.tags) : doc.tags || null,
+  note: doc.note || null,
+  source: doc.source || 'manual',
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapAIDoc = (doc: any): AIConversation => ({
+  id: doc.$id,
+  userId: doc.userId,
+  messages: typeof doc.messages === 'string' ? JSON.parse(doc.messages) : doc.messages,
+  extractedSignals: typeof doc.extractedSignals === 'string' ? JSON.parse(doc.extractedSignals) : doc.extractedSignals || null,
+  sentimentScore: doc.sentimentScore !== undefined ? doc.sentimentScore : null,
+  crisisFlagged: !!doc.crisisFlagged,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapAssessmentDoc = (doc: any): Assessment => ({
+  id: doc.$id,
+  userId: doc.userId,
+  type: doc.type,
+  responses: typeof doc.responses === 'string' ? JSON.parse(doc.responses) : doc.responses,
+  score: doc.score,
+  severity: doc.severity,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapInsightDoc = (doc: any): Insight => ({
+  id: doc.$id,
+  userId: doc.userId,
+  weekStart: parseDate(doc.weekStart),
+  summaryMd: doc.summaryMd,
+  trend: doc.trend,
+  riskLevel: doc.riskLevel,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapAlertDoc = (doc: any): Alert => ({
+  id: doc.$id,
+  userId: doc.userId,
+  therapistId: doc.therapistId,
+  type: doc.type,
+  severity: doc.severity,
+  message: doc.message,
+  resolved: !!doc.resolved,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
+const mapLinkDoc = (doc: any): TherapistLink => ({
+  id: doc.$id,
+  therapistId: doc.therapistId,
+  userId: doc.userId,
+  status: doc.status,
+  createdAt: parseDate(doc.createdAt || doc.$createdAt),
+});
+
 // ----------------------------------------------------
 // User Queries & Mutations
 // ----------------------------------------------------
 export async function getUser(id: string): Promise<User | null> {
-  if (db) {
-    const results = await db.select().from(schema.users).where(eq(schema.users.id, id)).limit(1);
-    return results[0] || null;
+  if (appwriteTables) {
+    try {
+      const doc = await appwriteTables.getRow({ databaseId, tableId: usersTableId, rowId: id });
+      return mapUserDoc(doc);
+    } catch (err) {
+      return null;
+    }
   } else {
     const data = getMockData();
     const user = data.users.find((u: any) => u.id === id);
@@ -102,9 +207,20 @@ export async function getUser(id: string): Promise<User | null> {
 }
 
 export async function getUserByEmail(email: string): Promise<User | null> {
-  if (db) {
-    const results = await db.select().from(schema.users).where(eq(schema.users.email, email)).limit(1);
-    return results[0] || null;
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: usersTableId,
+        queries: [
+          Query.equal('email', email.toLowerCase()),
+          Query.limit(1),
+        ],
+      });
+      return list.rows[0] ? mapUserDoc(list.rows[0]) : null;
+    } catch (err) {
+      return null;
+    }
   } else {
     const data = getMockData();
     const user = data.users.find((u: any) => u.email.toLowerCase() === email.toLowerCase());
@@ -115,31 +231,31 @@ export async function getUserByEmail(email: string): Promise<User | null> {
 
 export async function createUser(id: string, email: string, name: string | null, role = 'patient'): Promise<User> {
   const newUser = {
-    id,
     email,
     name,
     role,
     therapistId: null,
     timezone: 'UTC',
     clinicalNotes: null,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    await db.insert(schema.users).values(newUser);
-    return newUser;
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: usersTableId, rowId: id, data: newUser });
+    return mapUserDoc(doc);
   } else {
     const data = getMockData();
-    data.users.push({ ...newUser, createdAt: newUser.createdAt.toISOString() });
+    data.users.push({ id, ...newUser });
     writeMockData(data);
-    return newUser;
+    return { id, ...newUser, createdAt: parseDate(newUser.createdAt) };
   }
 }
 
 export async function updateUser(id: string, updates: Partial<Omit<User, 'id' | 'createdAt'>>): Promise<User> {
-  if (db) {
-    const results = await db.update(schema.users).set(updates).where(eq(schema.users.id, id)).returning();
-    return results[0];
+  if (appwriteTables) {
+    const cleanUpdates = { ...updates } as any;
+    const doc = await appwriteTables.updateRow({ databaseId, tableId: usersTableId, rowId: id, data: cleanUpdates });
+    return mapUserDoc(doc);
   } else {
     const data = getMockData();
     const index = data.users.findIndex((u: any) => u.id === id);
@@ -155,17 +271,20 @@ export async function updateUser(id: string, updates: Partial<Omit<User, 'id' | 
 // Mood Entries Queries & Mutations
 // ----------------------------------------------------
 export async function getMoodEntries(userId: string, days?: number): Promise<MoodEntry[]> {
-  if (db) {
-    let query = db.select().from(schema.moodEntries).where(eq(schema.moodEntries.userId, userId)).orderBy(desc(schema.moodEntries.createdAt));
-    if (days) {
-      const cutOff = new Date();
-      cutOff.setDate(cutOff.getDate() - days);
-      // Wait, Drizzle allows and() and gte() filters:
-      return await db.select().from(schema.moodEntries)
-        .where(and(eq(schema.moodEntries.userId, userId), gte(schema.moodEntries.createdAt, cutOff)))
-        .orderBy(desc(schema.moodEntries.createdAt));
+  if (appwriteTables) {
+    try {
+      const queries = [Query.equal('userId', userId), Query.orderDesc('createdAt')];
+      if (days) {
+        const cutOff = new Date();
+        cutOff.setDate(cutOff.getDate() - days);
+        queries.push(Query.greaterThanEqual('createdAt', cutOff.toISOString()));
+      }
+      const list = await appwriteTables.listRows({ databaseId, tableId: moodEntriesTableId, queries });
+      return list.rows.map(mapMoodDoc);
+    } catch (err) {
+      console.error('Appwrite mood entries fetch failed:', err);
+      return [];
     }
-    return await query;
   } else {
     const data = getMockData();
     let entries = data.moodEntries
@@ -182,19 +301,29 @@ export async function getMoodEntries(userId: string, days?: number): Promise<Moo
 
 export async function addMoodEntry(entry: Omit<MoodEntry, 'id' | 'createdAt'>): Promise<MoodEntry> {
   const newEntry = {
-    id: uuidv4(),
-    ...entry,
-    createdAt: new Date(),
+    userId: entry.userId,
+    moodScore: entry.moodScore,
+    energy: entry.energy,
+    sleepHours: entry.sleepHours,
+    tags: entry.tags ? JSON.stringify(entry.tags) : null,
+    note: entry.note,
+    source: entry.source,
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.moodEntries).values(newEntry).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: moodEntriesTableId, rowId: uuidv4(), data: newEntry });
+    return mapMoodDoc(doc);
   } else {
     const data = getMockData();
-    data.moodEntries.push({ ...newEntry, createdAt: newEntry.createdAt.toISOString() });
+    const rawMockEntry = {
+      id: uuidv4(),
+      ...entry,
+      createdAt: newEntry.createdAt,
+    };
+    data.moodEntries.push(rawMockEntry);
     writeMockData(data);
-    return newEntry;
+    return { ...rawMockEntry, createdAt: parseDate(rawMockEntry.createdAt) };
   }
 }
 
@@ -202,8 +331,21 @@ export async function addMoodEntry(entry: Omit<MoodEntry, 'id' | 'createdAt'>): 
 // AI Conversations Queries & Mutations
 // ----------------------------------------------------
 export async function getAIConversations(userId: string): Promise<AIConversation[]> {
-  if (db) {
-    return await db.select().from(schema.aiConversations).where(eq(schema.aiConversations.userId, userId)).orderBy(desc(schema.aiConversations.createdAt));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: aiConversationsTableId,
+        queries: [
+          Query.equal('userId', userId),
+          Query.orderDesc('createdAt'),
+        ],
+      });
+      return list.rows.map(mapAIDoc);
+    } catch (err) {
+      console.error('Appwrite conversations fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.aiConversations
@@ -215,19 +357,27 @@ export async function getAIConversations(userId: string): Promise<AIConversation
 
 export async function addAIConversation(conversation: Omit<AIConversation, 'id' | 'createdAt'>): Promise<AIConversation> {
   const newConv = {
-    id: uuidv4(),
-    ...conversation,
-    createdAt: new Date(),
+    userId: conversation.userId,
+    messages: typeof conversation.messages === 'string' ? conversation.messages : JSON.stringify(conversation.messages),
+    extractedSignals: conversation.extractedSignals ? (typeof conversation.extractedSignals === 'string' ? conversation.extractedSignals : JSON.stringify(conversation.extractedSignals)) : null,
+    sentimentScore: conversation.sentimentScore,
+    crisisFlagged: !!conversation.crisisFlagged,
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.aiConversations).values(newConv).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: aiConversationsTableId, rowId: uuidv4(), data: newConv });
+    return mapAIDoc(doc);
   } else {
     const data = getMockData();
-    data.aiConversations.push({ ...newConv, createdAt: newConv.createdAt.toISOString() });
+    const rawMockConv = {
+      id: uuidv4(),
+      ...conversation,
+      createdAt: newConv.createdAt,
+    };
+    data.aiConversations.push(rawMockConv);
     writeMockData(data);
-    return newConv;
+    return { ...rawMockConv, createdAt: parseDate(rawMockConv.createdAt) };
   }
 }
 
@@ -235,8 +385,21 @@ export async function addAIConversation(conversation: Omit<AIConversation, 'id' 
 // Assessments Queries & Mutations
 // ----------------------------------------------------
 export async function getAssessments(userId: string): Promise<Assessment[]> {
-  if (db) {
-    return await db.select().from(schema.assessments).where(eq(schema.assessments.userId, userId)).orderBy(desc(schema.assessments.createdAt));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: assessmentsTableId,
+        queries: [
+          Query.equal('userId', userId),
+          Query.orderDesc('createdAt'),
+        ],
+      });
+      return list.rows.map(mapAssessmentDoc);
+    } catch (err) {
+      console.error('Appwrite assessments fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.assessments
@@ -248,19 +411,27 @@ export async function getAssessments(userId: string): Promise<Assessment[]> {
 
 export async function addAssessment(assessment: Omit<Assessment, 'id' | 'createdAt'>): Promise<Assessment> {
   const newAssessment = {
-    id: uuidv4(),
-    ...assessment,
-    createdAt: new Date(),
+    userId: assessment.userId,
+    type: assessment.type,
+    responses: typeof assessment.responses === 'string' ? assessment.responses : JSON.stringify(assessment.responses),
+    score: assessment.score,
+    severity: assessment.severity,
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.assessments).values(newAssessment).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: assessmentsTableId, rowId: uuidv4(), data: newAssessment });
+    return mapAssessmentDoc(doc);
   } else {
     const data = getMockData();
-    data.assessments.push({ ...newAssessment, createdAt: newAssessment.createdAt.toISOString() });
+    const rawMockAss = {
+      id: uuidv4(),
+      ...assessment,
+      createdAt: newAssessment.createdAt,
+    };
+    data.assessments.push(rawMockAss);
     writeMockData(data);
-    return newAssessment;
+    return { ...rawMockAss, createdAt: parseDate(rawMockAss.createdAt) };
   }
 }
 
@@ -268,8 +439,21 @@ export async function addAssessment(assessment: Omit<Assessment, 'id' | 'created
 // Insights Queries & Mutations
 // ----------------------------------------------------
 export async function getInsights(userId: string): Promise<Insight[]> {
-  if (db) {
-    return await db.select().from(schema.insights).where(eq(schema.insights.userId, userId)).orderBy(desc(schema.insights.createdAt));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: insightsTableId,
+        queries: [
+          Query.equal('userId', userId),
+          Query.orderDesc('createdAt'),
+        ],
+      });
+      return list.rows.map(mapInsightDoc);
+    } catch (err) {
+      console.error('Appwrite insights fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.insights
@@ -281,23 +465,27 @@ export async function getInsights(userId: string): Promise<Insight[]> {
 
 export async function addInsight(insight: Omit<Insight, 'id' | 'createdAt'>): Promise<Insight> {
   const newInsight = {
-    id: uuidv4(),
-    ...insight,
-    createdAt: new Date(),
+    userId: insight.userId,
+    weekStart: insight.weekStart.toISOString(),
+    summaryMd: insight.summaryMd,
+    trend: insight.trend,
+    riskLevel: insight.riskLevel,
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.insights).values(newInsight).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: insightsTableId, rowId: uuidv4(), data: newInsight });
+    return mapInsightDoc(doc);
   } else {
     const data = getMockData();
-    data.insights.push({
-      ...newInsight,
-      weekStart: newInsight.weekStart.toISOString(),
-      createdAt: newInsight.createdAt.toISOString(),
-    });
+    const rawMockInsight = {
+      id: uuidv4(),
+      ...insight,
+      createdAt: newInsight.createdAt,
+    };
+    data.insights.push(rawMockInsight);
     writeMockData(data);
-    return newInsight;
+    return { ...rawMockInsight, weekStart: parseDate(rawMockInsight.weekStart), createdAt: parseDate(rawMockInsight.createdAt) };
   }
 }
 
@@ -305,8 +493,21 @@ export async function addInsight(insight: Omit<Insight, 'id' | 'createdAt'>): Pr
 // Alerts Queries & Mutations
 // ----------------------------------------------------
 export async function getAlerts(therapistId: string): Promise<Alert[]> {
-  if (db) {
-    return await db.select().from(schema.alerts).where(eq(schema.alerts.therapistId, therapistId)).orderBy(desc(schema.alerts.createdAt));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: alertsTableId,
+        queries: [
+          Query.equal('therapistId', therapistId),
+          Query.orderDesc('createdAt'),
+        ],
+      });
+      return list.rows.map(mapAlertDoc);
+    } catch (err) {
+      console.error('Appwrite alerts fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.alerts
@@ -318,27 +519,41 @@ export async function getAlerts(therapistId: string): Promise<Alert[]> {
 
 export async function addAlert(alert: Omit<Alert, 'id' | 'createdAt' | 'resolved'>): Promise<Alert> {
   const newAlert = {
-    id: uuidv4(),
-    ...alert,
+    userId: alert.userId,
+    therapistId: alert.therapistId,
+    type: alert.type,
+    severity: alert.severity,
+    message: alert.message,
     resolved: false,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.alerts).values(newAlert).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: alertsTableId, rowId: uuidv4(), data: newAlert });
+    return mapAlertDoc(doc);
   } else {
     const data = getMockData();
-    data.alerts.push({ ...newAlert, createdAt: newAlert.createdAt.toISOString() });
+    const rawMockAlert = {
+      id: uuidv4(),
+      ...alert,
+      resolved: false,
+      createdAt: newAlert.createdAt,
+    };
+    data.alerts.push(rawMockAlert);
     writeMockData(data);
-    return newAlert;
+    return { ...rawMockAlert, createdAt: parseDate(rawMockAlert.createdAt) };
   }
 }
 
 export async function resolveAlert(alertId: string): Promise<Alert> {
-  if (db) {
-    const results = await db.update(schema.alerts).set({ resolved: true }).where(eq(schema.alerts.id, alertId)).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.updateRow({
+      databaseId,
+      tableId: alertsTableId,
+      rowId: alertId,
+      data: { resolved: true },
+    });
+    return mapAlertDoc(doc);
   } else {
     const data = getMockData();
     const index = data.alerts.findIndex((a: any) => a.id === alertId);
@@ -353,8 +568,20 @@ export async function resolveAlert(alertId: string): Promise<Alert> {
 // Therapist Links Queries & Mutations
 // ----------------------------------------------------
 export async function getTherapistLinks(therapistId: string): Promise<TherapistLink[]> {
-  if (db) {
-    return await db.select().from(schema.therapistLinks).where(eq(schema.therapistLinks.therapistId, therapistId));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: therapistLinksTableId,
+        queries: [
+          Query.equal('therapistId', therapistId),
+        ],
+      });
+      return list.rows.map(mapLinkDoc);
+    } catch (err) {
+      console.error('Appwrite therapist links fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.therapistLinks
@@ -365,28 +592,36 @@ export async function getTherapistLinks(therapistId: string): Promise<TherapistL
 
 export async function createTherapistLink(therapistId: string, userId: string, status = 'pending'): Promise<TherapistLink> {
   const newLink = {
-    id: uuidv4(),
     therapistId,
     userId,
     status,
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
   };
 
-  if (db) {
-    const results = await db.insert(schema.therapistLinks).values(newLink).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.createRow({ databaseId, tableId: therapistLinksTableId, rowId: uuidv4(), data: newLink });
+    return mapLinkDoc(doc);
   } else {
     const data = getMockData();
-    data.therapistLinks.push({ ...newLink, createdAt: newLink.createdAt.toISOString() });
+    const rawMockLink = {
+      id: uuidv4(),
+      ...newLink,
+    };
+    data.therapistLinks.push(rawMockLink);
     writeMockData(data);
-    return newLink;
+    return { ...rawMockLink, createdAt: parseDate(rawMockLink.createdAt) };
   }
 }
 
 export async function updateTherapistLink(linkId: string, status: string): Promise<TherapistLink> {
-  if (db) {
-    const results = await db.update(schema.therapistLinks).set({ status }).where(eq(schema.therapistLinks.id, linkId)).returning();
-    return results[0];
+  if (appwriteTables) {
+    const doc = await appwriteTables.updateRow({
+      databaseId,
+      tableId: therapistLinksTableId,
+      rowId: linkId,
+      data: { status },
+    });
+    return mapLinkDoc(doc);
   } else {
     const data = getMockData();
     const index = data.therapistLinks.findIndex((l: any) => l.id === linkId);
@@ -399,9 +634,20 @@ export async function updateTherapistLink(linkId: string, status: string): Promi
 
 // Helper to get linked patients for a therapist
 export async function getLinkedPatients(therapistId: string): Promise<User[]> {
-  if (db) {
-    // Return all users who have therapist_id set to this therapistId
-    return await db.select().from(schema.users).where(eq(schema.users.therapistId, therapistId));
+  if (appwriteTables) {
+    try {
+      const list = await appwriteTables.listRows({
+        databaseId,
+        tableId: usersTableId,
+        queries: [
+          Query.equal('therapistId', therapistId),
+        ],
+      });
+      return list.rows.map(mapUserDoc);
+    } catch (err) {
+      console.error('Appwrite linked patients fetch failed:', err);
+      return [];
+    }
   } else {
     const data = getMockData();
     return data.users

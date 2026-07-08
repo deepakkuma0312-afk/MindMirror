@@ -1,14 +1,13 @@
 'use strict';
 'use server';
 
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser, isAppwriteConfigured, createAdminClient } from '@/lib/auth/appwrite';
 import { getUserByEmail, updateUser, createTherapistLink } from '@/lib/db/dbHelper';
-import { db, getMockData, writeMockData } from '@/lib/db/index';
-import * as schema from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { getMockData, writeMockData } from '@/lib/db/index';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Client, TablesDB, Query } from 'node-appwrite';
 
 export async function linkTherapistAction(formData: FormData) {
   const user = await getSessionUser();
@@ -50,15 +49,55 @@ export async function deleteUserDataAction() {
   }
 
   try {
-    if (db) {
-      // Cascade delete is configured on schema references, but let's delete manually to be safe
-      await db.delete(schema.moodEntries).where(eq(schema.moodEntries.userId, user.id));
-      await db.delete(schema.assessments).where(eq(schema.assessments.userId, user.id));
-      await db.delete(schema.aiConversations).where(eq(schema.aiConversations.userId, user.id));
-      await db.delete(schema.insights).where(eq(schema.insights.userId, user.id));
-      await db.delete(schema.alerts).where(eq(schema.alerts.userId, user.id));
-      await db.delete(schema.therapistLinks).where(eq(schema.therapistLinks.userId, user.id));
-      await db.delete(schema.users).where(eq(schema.users.id, user.id));
+    if (isAppwriteConfigured) {
+      const client = new Client()
+        .setEndpoint(process.env.APPWRITE_ENDPOINT!)
+        .setProject(process.env.APPWRITE_PROJECT_ID!)
+        .setKey(process.env.APPWRITE_API_KEY!);
+      const tablesDB = new TablesDB(client);
+      const databaseId = process.env.APPWRITE_DATABASE_ID!;
+
+      const deleteUserDocs = async (tableId: string) => {
+        try {
+          const list = await tablesDB.listRows({
+            databaseId,
+            tableId,
+            queries: [
+              Query.equal('userId', user.id),
+              Query.limit(100),
+            ],
+          });
+          for (const row of list.rows) {
+            await tablesDB.deleteRow({ databaseId, tableId, rowId: row.$id });
+          }
+        } catch (e) {
+          console.error(`Appwrite delete rows failed for table ${tableId}:`, e);
+        }
+      };
+
+      await deleteUserDocs(process.env.APPWRITE_MOOD_ENTRIES_TABLE_ID!);
+      await deleteUserDocs(process.env.APPWRITE_ASSESSMENTS_TABLE_ID!);
+      await deleteUserDocs(process.env.APPWRITE_AI_CONVERSATIONS_TABLE_ID!);
+      await deleteUserDocs(process.env.APPWRITE_INSIGHTS_TABLE_ID!);
+      await deleteUserDocs(process.env.APPWRITE_ALERTS_TABLE_ID!);
+      await deleteUserDocs(process.env.APPWRITE_THERAPIST_LINKS_TABLE_ID!);
+
+      // Delete user document in users table
+      try {
+        await tablesDB.deleteRow({ databaseId, tableId: process.env.APPWRITE_USERS_TABLE_ID!, rowId: user.id });
+      } catch (e) {
+        console.error('Appwrite delete user doc failed:', e);
+      }
+
+      // Delete Auth account
+      const admin = await createAdminClient();
+      if (admin) {
+        try {
+          await admin.users.delete(user.id);
+        } catch (e) {
+          console.error('Appwrite delete auth user failed:', e);
+        }
+      }
     } else {
       // Mock db clean up
       const data = getMockData();
@@ -76,6 +115,7 @@ export async function deleteUserDataAction() {
 
     // Clear authentication cookies
     const cookieStore = await cookies();
+    cookieStore.delete('appwrite-session');
     cookieStore.delete('mindmirror-session');
     cookieStore.delete('mindmirror-role');
   } catch (error) {

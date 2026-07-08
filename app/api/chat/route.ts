@@ -2,7 +2,7 @@ import { createGoogle } from '@ai-sdk/google';
 import { streamText, tool } from 'ai';
 import { MINDMIRROR_SYSTEM_PROMPT } from '@/lib/ai/prompts';
 import { detectCrisis } from '@/lib/ai/crisis-detector';
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { addMoodEntry, addAIConversation, addAlert, getUser } from '@/lib/db/dbHelper';
 import { z } from 'zod';
 

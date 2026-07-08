@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getAssessments } from '@/lib/db/dbHelper';
 import AssessmentForm from '@/components/assessments/AssessmentForm';
 import { format } from 'date-fns';

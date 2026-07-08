@@ -25,30 +25,18 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isSupabaseConfigured = !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const isAppwriteConfigured = !!(
+    process.env.APPWRITE_ENDPOINT &&
+    process.env.APPWRITE_PROJECT_ID &&
+    process.env.APPWRITE_DATABASE_ID &&
+    process.env.APPWRITE_API_KEY
   );
 
-  let supabaseProjectId = '';
-  if (isSupabaseConfigured) {
-    try {
-      const urlObj = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
-      supabaseProjectId = urlObj.hostname.split('.')[0];
-    } catch (e) {
-      const match = process.env.NEXT_PUBLIC_SUPABASE_URL!.match(/https:\/\/([a-z0-9\-]+)\.supabase\./i);
-      if (match) {
-        supabaseProjectId = match[1];
-      }
-    }
-  }
-
   // Get session status from cookies
-  // Supports both Supabase token cookies and our local session cookie
+  // Supports both Appwrite token cookies and our local session cookie
   const mockSession = request.cookies.get('mindmirror-session')?.value;
-  const sbCookiePrefix = supabaseProjectId ? `sb-${supabaseProjectId}-` : 'sb-';
-  const sbSession = isSupabaseConfigured && request.cookies.getAll().some(c => c.name.startsWith(sbCookiePrefix));
-  const hasSession = !!(mockSession || sbSession);
+  const appwriteSession = isAppwriteConfigured && request.cookies.get('appwrite-session')?.value;
+  const hasSession = !!(mockSession || appwriteSession);
 
   // If no session and trying to access protected content
   if (!hasSession) {

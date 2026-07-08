@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getAlerts, getUser } from '@/lib/db/dbHelper';
 import { resolveAlertAction } from '@/app/actions/therapist';
 import { format } from 'date-fns';

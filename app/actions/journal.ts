@@ -1,7 +1,7 @@
 'use strict';
 'use server';
 
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { addMoodEntry } from '@/lib/db/dbHelper';
 import { encrypt } from '@/lib/utils/encryption';
 import { revalidatePath } from 'next/cache';

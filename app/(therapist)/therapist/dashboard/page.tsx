@@ -1,4 +1,4 @@
-import { getSessionUser } from '@/lib/auth/supabase';
+import { getSessionUser } from '@/lib/auth/appwrite';
 import { getLinkedPatients, getAlerts, getInsights, getMoodEntries } from '@/lib/db/dbHelper';
 import { resolveAlertAction } from '@/app/actions/therapist';
 import Link from 'next/link';
