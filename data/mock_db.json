@@ -1,0 +1,1046 @@
+{
+  "users": [
+    {
+      "id": "therapist_sharma",
+      "email": "sharma@example.com",
+      "name": "Dr. Sharma",
+      "role": "therapist",
+      "therapistId": null,
+      "timezone": "UTC",
+      "createdAt": "2026-06-05T18:22:26.971Z"
+    },
+    {
+      "id": "patient_priya",
+      "email": "priya@example.com",
+      "name": "Priya Sharma",
+      "role": "patient",
+      "therapistId": "therapist_sharma",
+      "timezone": "UTC",
+      "createdAt": "2026-06-06T18:22:26.972Z"
+    },
+    {
+      "id": "usr_049cs2qu2",
+      "email": "itwillhelpfullforyou@gmail.com",
+      "name": "ronnie Sharma",
+      "role": "patient",
+      "therapistId": "usr_xs9hff3ju",
+      "timezone": "UTC",
+      "createdAt": "2026-07-08T08:27:53.477Z"
+    },
+    {
+      "id": "usr_xs9hff3ju",
+      "email": "anuvarma134@gmail.com",
+      "name": "Anu Varma",
+      "role": "therapist",
+      "therapistId": null,
+      "timezone": "UTC",
+      "createdAt": "2026-07-08T10:51:58.468Z"
+    },
+    {
+      "id": "usr_7jpgixzze",
+      "email": "priya@gmail.com",
+      "name": "priya s",
+      "role": "patient",
+      "therapistId": "usr_xs9hff3ju",
+      "timezone": "UTC",
+      "createdAt": "2026-07-08T11:16:41.220Z"
+    },
+    {
+      "id": "usr_zd1n7tn6i",
+      "email": "creativeai064@gmail.com",
+      "name": "Amit p",
+      "role": "patient",
+      "therapistId": "usr_xs9hff3ju",
+      "timezone": "UTC",
+      "createdAt": "2026-07-08T11:38:33.735Z",
+      "clinicalNotes": "you have go outside stay connect with friends and talk with family and friends"
+    }
+  ],
+  "moodEntries": [
+    {
+      "id": "mood_0",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-07T18:22:26.972Z"
+    },
+    {
+      "id": "mood_1",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-08T18:22:26.972Z"
+    },
+    {
+      "id": "mood_2",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-09T18:22:26.972Z"
+    },
+    {
+      "id": "mood_3",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-10T18:22:26.972Z"
+    },
+    {
+      "id": "mood_4",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-11T18:22:26.972Z"
+    },
+    {
+      "id": "mood_5",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-12T18:22:26.972Z"
+    },
+    {
+      "id": "mood_6",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-13T18:22:26.972Z"
+    },
+    {
+      "id": "mood_7",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-14T18:22:26.972Z"
+    },
+    {
+      "id": "mood_8",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-15T18:22:26.972Z"
+    },
+    {
+      "id": "mood_9",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "exercise",
+        "family"
+      ],
+      "note": "Had a good day, got some fresh air.",
+      "source": "manual",
+      "createdAt": "2026-06-16T18:22:26.972Z"
+    },
+    {
+      "id": "mood_10",
+      "userId": "patient_priya",
+      "moodScore": 5,
+      "energy": 3,
+      "sleepHours": 5,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-17T18:22:26.972Z"
+    },
+    {
+      "id": "mood_11",
+      "userId": "patient_priya",
+      "moodScore": 3,
+      "energy": 4,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-18T18:22:26.972Z"
+    },
+    {
+      "id": "mood_12",
+      "userId": "patient_priya",
+      "moodScore": 3,
+      "energy": 3,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-19T18:22:26.972Z"
+    },
+    {
+      "id": "mood_13",
+      "userId": "patient_priya",
+      "moodScore": 5,
+      "energy": 4,
+      "sleepHours": 5,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-20T18:22:26.972Z"
+    },
+    {
+      "id": "mood_14",
+      "userId": "patient_priya",
+      "moodScore": 3,
+      "energy": 3,
+      "sleepHours": 5,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-21T18:22:26.972Z"
+    },
+    {
+      "id": "mood_15",
+      "userId": "patient_priya",
+      "moodScore": 5,
+      "energy": 3,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-22T18:22:26.972Z"
+    },
+    {
+      "id": "mood_16",
+      "userId": "patient_priya",
+      "moodScore": 4,
+      "energy": 2,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-23T18:22:26.972Z"
+    },
+    {
+      "id": "mood_17",
+      "userId": "patient_priya",
+      "moodScore": 3,
+      "energy": 2,
+      "sleepHours": 5,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-24T18:22:26.972Z"
+    },
+    {
+      "id": "mood_18",
+      "userId": "patient_priya",
+      "moodScore": 4,
+      "energy": 4,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-25T18:22:26.972Z"
+    },
+    {
+      "id": "mood_19",
+      "userId": "patient_priya",
+      "moodScore": 4,
+      "energy": 4,
+      "sleepHours": 6,
+      "tags": [
+        "work",
+        "stress",
+        "tired"
+      ],
+      "note": "Feeling extremely overwhelmed with work deadlines. Sleep was interrupted and energy is low.",
+      "source": "ai",
+      "createdAt": "2026-06-26T18:22:26.972Z"
+    },
+    {
+      "id": "mood_20",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 8,
+      "sleepHours": 7.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-06-27T18:22:26.972Z"
+    },
+    {
+      "id": "mood_21",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 8,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-06-28T18:22:26.972Z"
+    },
+    {
+      "id": "mood_22",
+      "userId": "patient_priya",
+      "moodScore": 8,
+      "energy": 6,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-06-29T18:22:26.972Z"
+    },
+    {
+      "id": "mood_23",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 6,
+      "sleepHours": 7.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-06-30T18:22:26.972Z"
+    },
+    {
+      "id": "mood_24",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 8,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-01T18:22:26.972Z"
+    },
+    {
+      "id": "mood_25",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 8,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-02T18:22:26.972Z"
+    },
+    {
+      "id": "mood_26",
+      "userId": "patient_priya",
+      "moodScore": 8,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-03T18:22:26.972Z"
+    },
+    {
+      "id": "mood_27",
+      "userId": "patient_priya",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-04T18:22:26.972Z"
+    },
+    {
+      "id": "mood_28",
+      "userId": "patient_priya",
+      "moodScore": 9,
+      "energy": 6,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-05T18:22:26.972Z"
+    },
+    {
+      "id": "mood_29",
+      "userId": "patient_priya",
+      "moodScore": 8,
+      "energy": 7,
+      "sleepHours": 8.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-06T18:22:26.972Z"
+    },
+    {
+      "id": "mood_30",
+      "userId": "patient_priya",
+      "moodScore": 8,
+      "energy": 6,
+      "sleepHours": 7.5,
+      "tags": [
+        "mindfulness",
+        "relationship",
+        "exercise"
+      ],
+      "note": "Feeling much better. Inserted breaks at work and slept well.",
+      "source": "manual",
+      "createdAt": "2026-07-07T18:22:26.972Z"
+    },
+    {
+      "id": "8934db2d-daef-4de2-9f09-d5c64177fbc1",
+      "userId": "usr_049cs2qu2",
+      "moodScore": 7,
+      "energy": 7,
+      "sleepHours": 7.5,
+      "tags": [
+        "stress"
+      ],
+      "note": "1b54b7b1592b15fae98f41fa7ccdd56c:a5378725cc369e4fb478e60b9ef1abe386f1f8c90fd2de6c3c5a84a549476dc9d5e64df0d088984cec8bf8793da32a9d",
+      "source": "manual",
+      "createdAt": "2026-07-08T08:38:31.491Z"
+    },
+    {
+      "id": "1194d586-f561-49ac-9b85-1330b0f348e1",
+      "userId": "usr_049cs2qu2",
+      "moodScore": 9,
+      "energy": 8,
+      "sleepHours": 7.5,
+      "tags": [
+        "work",
+        "sleep",
+        "health"
+      ],
+      "note": "Felt positive with tags [work, sleep, health].",
+      "source": "ai",
+      "createdAt": "2026-07-08T10:50:24.614Z"
+    },
+    {
+      "id": "b31186ad-0762-4fc9-9921-7d4a4b3c376b",
+      "userId": "usr_7jpgixzze",
+      "moodScore": 7,
+      "energy": 6,
+      "sleepHours": 7.5,
+      "tags": [
+        "reflection"
+      ],
+      "note": "Felt positive with tags [reflection].",
+      "source": "ai",
+      "createdAt": "2026-07-08T11:18:00.790Z"
+    },
+    {
+      "id": "891dda1f-2370-4c58-bd0c-956fe7292297",
+      "userId": "usr_7jpgixzze",
+      "moodScore": 1,
+      "energy": 1,
+      "sleepHours": 4.5,
+      "tags": [
+        "mindfulness",
+        "stress",
+        "anxiety"
+      ],
+      "note": "4b0f0586d7351917c23dcc796af2e868:b74a36d4f4c9f4f6218137fc7fd0e568518ea1593b4d6befe05ab4fcdca9c99a810ba4064c3b8d30da398c4eca35110ac0c8b03824eb659eca15c93be99be47d317c6ed6bd152d8a3b0a9afbf42447c3f57625442678bdf729bd2f29cc090c5b",
+      "source": "manual",
+      "createdAt": "2026-07-08T11:21:50.202Z"
+    },
+    {
+      "id": "e1f7a7f5-0736-4a1b-b72c-360b2a8d8aad",
+      "userId": "usr_7jpgixzze",
+      "moodScore": 4,
+      "energy": 6,
+      "sleepHours": 1,
+      "tags": [
+        "sleep",
+        "cognitive"
+      ],
+      "note": "Felt challenged with tags [sleep, cognitive].",
+      "source": "ai",
+      "createdAt": "2026-07-08T11:30:22.432Z"
+    },
+    {
+      "id": "02d598de-9030-4968-81b0-fbae19d55649",
+      "userId": "usr_7jpgixzze",
+      "moodScore": 4,
+      "energy": 3,
+      "sleepHours": 1,
+      "tags": [
+        "sleep",
+        "cognitive",
+        "anxiety"
+      ],
+      "note": "Felt challenged with tags [sleep, cognitive, anxiety].",
+      "source": "ai",
+      "createdAt": "2026-07-08T11:34:34.299Z"
+    },
+    {
+      "id": "6cfbb36c-ba07-4acd-9d07-beaa4a9efc7b",
+      "userId": "usr_zd1n7tn6i",
+      "moodScore": 4,
+      "energy": 5,
+      "sleepHours": 1,
+      "tags": [
+        "sleep",
+        "cognitive",
+        "anxiety",
+        "mood"
+      ],
+      "note": "Felt challenged with tags [sleep, cognitive, anxiety, mood].",
+      "source": "ai",
+      "createdAt": "2026-07-08T11:39:56.935Z"
+    },
+    {
+      "id": "cb565d9e-bb23-4658-8e42-11b7754c1947",
+      "userId": "usr_zd1n7tn6i",
+      "moodScore": 2,
+      "energy": 2,
+      "sleepHours": 3,
+      "tags": [
+        "relationship",
+        "family",
+        "mindfulness",
+        "stress",
+        "nature",
+        "exercise"
+      ],
+      "note": "bafd45a13e2ac47d069ed689e7097d01:5c3ac40eed70ae2538cd75496ad4472d",
+      "source": "manual",
+      "createdAt": "2026-07-08T11:41:01.293Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": "asmt_1",
+      "userId": "patient_priya",
+      "type": "GAD7",
+      "responses": {
+        "0": 2,
+        "1": 2,
+        "2": 1,
+        "3": 2,
+        "4": 1,
+        "5": 2,
+        "6": 2
+      },
+      "score": 12,
+      "severity": "Moderate",
+      "createdAt": "2026-06-13T18:22:26.972Z"
+    },
+    {
+      "id": "asmt_2",
+      "userId": "patient_priya",
+      "type": "PHQ9",
+      "responses": {
+        "0": 3,
+        "1": 2,
+        "2": 3,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "6": 2,
+        "7": 1,
+        "8": 0
+      },
+      "score": 16,
+      "severity": "Moderately Severe",
+      "createdAt": "2026-06-20T18:22:26.972Z"
+    },
+    {
+      "id": "asmt_3",
+      "userId": "patient_priya",
+      "type": "GAD7",
+      "responses": {
+        "0": 1,
+        "1": 1,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1
+      },
+      "score": 7,
+      "severity": "Mild",
+      "createdAt": "2026-06-27T18:22:26.972Z"
+    },
+    {
+      "id": "asmt_4",
+      "userId": "patient_priya",
+      "type": "PHQ9",
+      "responses": {
+        "0": 1,
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 0,
+        "8": 0
+      },
+      "score": 4,
+      "severity": "Minimal",
+      "createdAt": "2026-07-04T18:22:26.972Z"
+    },
+    {
+      "id": "70753137-e86a-426a-8824-cd98a75512c1",
+      "userId": "usr_049cs2qu2",
+      "type": "PHQ9",
+      "responses": {
+        "0": 1,
+        "1": 1,
+        "2": 0,
+        "3": 2,
+        "4": 2,
+        "5": 1,
+        "6": 0,
+        "7": 3,
+        "8": 2
+      },
+      "score": 12,
+      "severity": "Moderate",
+      "createdAt": "2026-07-08T08:39:52.249Z"
+    },
+    {
+      "id": "92e8bc6b-9cd7-4210-910b-04107389e788",
+      "userId": "usr_049cs2qu2",
+      "type": "GAD7",
+      "responses": {
+        "0": 2,
+        "1": 3,
+        "2": 3,
+        "3": 2,
+        "4": 1,
+        "5": 2,
+        "6": 3
+      },
+      "score": 16,
+      "severity": "Severe",
+      "createdAt": "2026-07-08T08:40:39.534Z"
+    },
+    {
+      "id": "8a9e8110-af29-475e-97fc-be542d69c84a",
+      "userId": "usr_7jpgixzze",
+      "type": "PHQ9",
+      "responses": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 3,
+        "8": 3
+      },
+      "score": 26,
+      "severity": "Severe",
+      "createdAt": "2026-07-08T11:23:12.166Z"
+    },
+    {
+      "id": "af39fd26-b67b-413f-8fb6-f1418d683d10",
+      "userId": "usr_7jpgixzze",
+      "type": "GAD7",
+      "responses": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 2,
+        "4": 3,
+        "5": 3,
+        "6": 3
+      },
+      "score": 20,
+      "severity": "Severe",
+      "createdAt": "2026-07-08T11:23:49.819Z"
+    },
+    {
+      "id": "54ef9f8c-1cf4-49aa-b1c3-b1ea0b2935d3",
+      "userId": "usr_zd1n7tn6i",
+      "type": "PHQ9",
+      "responses": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 2,
+        "7": 3,
+        "8": 2
+      },
+      "score": 24,
+      "severity": "Severe",
+      "createdAt": "2026-07-08T11:41:19.932Z"
+    },
+    {
+      "id": "14ca8b19-4c7f-4f50-a5ce-f25ddc37f5de",
+      "userId": "usr_zd1n7tn6i",
+      "type": "GAD7",
+      "responses": {
+        "0": 3,
+        "1": 3,
+        "2": 3,
+        "3": 2,
+        "4": 3,
+        "5": 2,
+        "6": 3
+      },
+      "score": 19,
+      "severity": "Severe",
+      "createdAt": "2026-07-08T11:41:45.714Z"
+    }
+  ],
+  "aiConversations": [
+    {
+      "id": "conv_1",
+      "userId": "patient_priya",
+      "messages": [
+        {
+          "role": "user",
+          "content": "I feel very stressed about my upcoming project delivery"
+        },
+        {
+          "role": "assistant",
+          "content": "I'm sorry to hear that. Project stress can be really heavy. How did you sleep last night?"
+        },
+        {
+          "role": "user",
+          "content": "Only 5 hours. Woke up in the middle of the night thinking about slides."
+        },
+        {
+          "role": "assistant",
+          "content": "That sounds exhausting. Let's make sure we log this trigger so you can inspect your sleep hygiene."
+        }
+      ],
+      "extractedSignals": {
+        "mood": 4,
+        "energy": 3,
+        "sleep_hours": 5,
+        "anxiety": 8,
+        "tags": [
+          "work",
+          "sleep"
+        ]
+      },
+      "sentimentScore": 0.4,
+      "crisisFlagged": false,
+      "createdAt": "2026-06-23T18:22:26.972Z"
+    },
+    {
+      "id": "conv_2",
+      "userId": "patient_priya",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Today was much better, spent time walking in the park"
+        },
+        {
+          "role": "assistant",
+          "content": "That sounds beautiful! Nature is a great way to ground yourself. How are you feeling physically?"
+        },
+        {
+          "role": "user",
+          "content": "Highly energized and clear-headed."
+        }
+      ],
+      "extractedSignals": {
+        "mood": 9,
+        "energy": 8,
+        "sleep_hours": 8,
+        "anxiety": 1,
+        "tags": [
+          "nature",
+          "exercise"
+        ]
+      },
+      "sentimentScore": 0.9,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-05T18:22:26.972Z"
+    },
+    {
+      "id": "f99b3d57-750f-43ad-9de7-3b02a7608beb",
+      "userId": "usr_049cs2qu2",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. How is your mind feeling today? Tell me a bit about your emotional state and physical energy.\"},{\"role\":\"user\",\"content\":\"my emotional state is good and physical energy is awesome\"},{\"role\":\"assistant\",\"content\":\"That's wonderful to hear! How was your sleep last night, and how are your energy levels today?\"},{\"role\":\"user\",\"content\":\"7+hours and 7\"},{\"role\":\"assistant\",\"content\":\"Got it. Reflecting on today, what do you think is the biggest driver or trigger behind how you are feeling? Is there anything specific (like work, relationships, or health) that stands out?\"},{\"role\":\"user\",\"content\":\"relationship\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (9/10), energy (8/10), sleep (7.5 hrs), and triggers (work, sleep, health). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 9,
+        "energy": 8,
+        "sleep_hours": 7.5,
+        "anxiety": 2,
+        "tags": [
+          "work",
+          "sleep",
+          "health"
+        ],
+        "summary": "Felt positive with tags [work, sleep, health]."
+      },
+      "sentimentScore": 0.9,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T10:50:24.632Z"
+    },
+    {
+      "id": "165bc790-54d9-4405-83a9-3dab4eeb9f15",
+      "userId": "usr_7jpgixzze",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. Today (Wednesday), let's explore your Mental Status. How are your thoughts flowing today—do they feel logical and organized, or are they racing/scattered?\"},{\"role\":\"user\",\"content\":\"racing scattered\"},{\"role\":\"assistant\",\"content\":\"I see. Today we are exploring our overall Cognitive State and Mental Status. Do your thoughts feel logical and organized today, or do they feel racing or scattered?\"},{\"role\":\"user\",\"content\":\"i feel scattered\"},{\"role\":\"assistant\",\"content\":\"I understand. Do you feel like you recognize what's triggering these thought patterns, and are you able to make safe decisions for yourself when they happen?\"},{\"role\":\"user\",\"content\":\"no i am confused\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (7/10), energy (6/10), sleep (7.5 hrs), and triggers (reflection). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 7,
+        "energy": 6,
+        "sleep_hours": 7.5,
+        "anxiety": 4,
+        "tags": [
+          "reflection"
+        ],
+        "summary": "Felt positive with tags [reflection]."
+      },
+      "sentimentScore": 0.7,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T11:18:00.794Z"
+    },
+    {
+      "id": "50b6f143-05c8-4faf-b17c-b8ef328fba2f",
+      "userId": "usr_7jpgixzze",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. Today (Wednesday), let's explore your Mental Status. How are your thoughts flowing today—do they feel logical and organized, or are they racing/scattered?\"},{\"role\":\"user\",\"content\":\"i feel scattered\"},{\"role\":\"assistant\",\"content\":\"I understand. Do you feel like you recognize what's triggering these thought patterns, and are you able to make safe decisions for yourself when they happen?\"},{\"role\":\"user\",\"content\":\"no i am confuced\"},{\"role\":\"assistant\",\"content\":\"Got it. To help complete today's wellness chart, how did you sleep last night (in hours) and how is your physical energy level today (1-10)?\"},{\"role\":\"user\",\"content\":\"like between 3-4 hours\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (4/10), energy (6/10), sleep (1 hrs), and triggers (sleep, cognitive). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 4,
+        "energy": 6,
+        "sleep_hours": 1,
+        "anxiety": 7,
+        "tags": [
+          "sleep",
+          "cognitive"
+        ],
+        "summary": "Felt challenged with tags [sleep, cognitive]."
+      },
+      "sentimentScore": 0.4,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T11:30:22.437Z"
+    },
+    {
+      "id": "0f428276-d176-4e55-9870-3d1c9e4ee71c",
+      "userId": "usr_7jpgixzze",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. Today (Wednesday), let's explore your Mental Status. How are your thoughts flowing today—do they feel logical and organized, or are they racing/scattered?\"},{\"role\":\"user\",\"content\":\"scattered\"},{\"role\":\"assistant\",\"content\":\"I understand. Do you feel like you recognize what's triggering these thought patterns, and are you able to make safe decisions for yourself when they happen?\"},{\"role\":\"user\",\"content\":\"anxiety\"},{\"role\":\"assistant\",\"content\":\"Got it. To help complete today's wellness chart, how did you sleep last night (in hours) and how is your physical energy level today (1-10)?\"},{\"role\":\"user\",\"content\":\"3\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (4/10), energy (3/10), sleep (1 hrs), and triggers (sleep, cognitive, anxiety). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 4,
+        "energy": 3,
+        "sleep_hours": 1,
+        "anxiety": 8,
+        "tags": [
+          "sleep",
+          "cognitive",
+          "anxiety"
+        ],
+        "summary": "Felt challenged with tags [sleep, cognitive, anxiety]."
+      },
+      "sentimentScore": 0.4,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T11:34:34.304Z"
+    },
+    {
+      "id": "2f4ecf37-028c-42b5-bb9b-a036a981c0c7",
+      "userId": "usr_zd1n7tn6i",
+      "messages": "[{\"role\":\"assistant\",\"content\":\"Hello! I'm MindMirror. Today (Wednesday), let's explore your Mental Status. How are your thoughts flowing today—do they feel logical and organized, or are they racing/scattered?\"},{\"role\":\"user\",\"content\":\"feeling depressed\"},{\"role\":\"assistant\",\"content\":\"I understand. Do you feel like you recognize what's triggering these thought patterns, and are you able to make safe decisions for yourself when they happen?\"},{\"role\":\"user\",\"content\":\"no i am not when i try my anxiety level incresed and stress\"},{\"role\":\"assistant\",\"content\":\"Got it. To help complete today's wellness chart, how did you sleep last night (in hours) and how is your physical energy level today (1-10)?\"},{\"role\":\"user\",\"content\":\"4.5\"},{\"role\":\"assistant\",\"content\":\"Thank you for sharing your reflection with me. I've noted down your mood (4/10), energy (5/10), sleep (1 hrs), and triggers (sleep, cognitive, anxiety, mood). Remember to be gentle with yourself. I've saved this check-in.\"}]",
+      "extractedSignals": {
+        "mood": 4,
+        "energy": 5,
+        "sleep_hours": 1,
+        "anxiety": 8,
+        "tags": [
+          "sleep",
+          "cognitive",
+          "anxiety",
+          "mood"
+        ],
+        "summary": "Felt challenged with tags [sleep, cognitive, anxiety, mood]."
+      },
+      "sentimentScore": 0.4,
+      "crisisFlagged": false,
+      "createdAt": "2026-07-08T11:39:56.939Z"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "alert_1",
+      "userId": "patient_priya",
+      "therapistId": "therapist_sharma",
+      "type": "assessment_severe",
+      "severity": "warning",
+      "message": "Priya Sharma scored \"Moderately Severe\" (16 points) on their Weekly Mood Screen (PHQ-9).",
+      "resolved": false,
+      "createdAt": "2026-06-20T18:22:26.972Z"
+    },
+    {
+      "id": "f837299f-e729-4632-837b-0cce423c4fd4",
+      "userId": "usr_zd1n7tn6i",
+      "therapistId": "usr_xs9hff3ju",
+      "type": "assessment_severe",
+      "severity": "warning",
+      "message": "Amit p scored \"Severe\" on their Anxiety Screen (GAD-7) checkup. Score: 19.",
+      "resolved": false,
+      "createdAt": "2026-07-08T11:41:45.732Z"
+    }
+  ],
+  "insights": [
+    {
+      "id": "insight_1",
+      "userId": "patient_priya",
+      "weekStart": "2026-06-30T18:22:26.972Z",
+      "summaryMd": "Your logs show a significant improvement in sleep hours and mood over the last week. The mid-month work-related anxiety has declined following daily breathing exercises. Keep protecting your rest limits. 🌱",
+      "trend": "improving",
+      "riskLevel": "low",
+      "createdAt": "2026-07-05T18:22:26.972Z"
+    }
+  ],
+  "therapistLinks": [
+    {
+      "id": "link_1",
+      "therapistId": "therapist_sharma",
+      "userId": "patient_priya",
+      "status": "active",
+      "createdAt": "2026-06-05T18:22:26.972Z"
+    },
+    {
+      "id": "1dd4fd9e-6f14-474d-93ef-7d8993a63682",
+      "therapistId": "usr_xs9hff3ju",
+      "userId": "usr_049cs2qu2",
+      "status": "active",
+      "createdAt": "2026-07-08T10:53:03.778Z"
+    },
+    {
+      "id": "6f59c605-5b55-49be-b890-742d5c27be76",
+      "therapistId": "usr_xs9hff3ju",
+      "userId": "usr_7jpgixzze",
+      "status": "active",
+      "createdAt": "2026-07-08T11:24:05.249Z"
+    },
+    {
+      "id": "9e1a3a81-3972-4221-8f32-f007021d877b",
+      "therapistId": "usr_xs9hff3ju",
+      "userId": "usr_zd1n7tn6i",
+      "status": "active",
+      "createdAt": "2026-07-08T11:41:31.104Z"
+    }
+  ]
+}

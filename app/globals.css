@@ -2,26 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 33 30% 97%; /* Warm Beige */
+    --foreground: 150 15% 15%; /* Deep Charcoal-Green */
+
+    --card: 0 0% 100%;
+    --card-foreground: 150 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 15% 15%;
+
+    --primary: 145 22% 35%; /* Calming Sage Green */
+    --primary-foreground: 33 30% 98%;
+
+    --secondary: 270 12% 93%; /* Dusty Lavender */
+    --secondary-foreground: 150 15% 15%;
+
+    --muted: 150 10% 90%;
+    --muted-foreground: 150 10% 45%;
+
+    --accent: 270 12% 93%;
+    --accent-foreground: 150 15% 15%;
+
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 10% 86%;
+    --input: 150 10% 86%;
+    --ring: 145 22% 35%;
+
+    --radius: 0.75rem;
+
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Instrument Serif', serif;
+  }
+
+  .dark {
+    --background: 150 15% 8%; /* Deep Charcoal Forest */
+    --foreground: 145 15% 90%; /* Light Sage */
+
+    --card: 150 15% 10%;
+    --card-foreground: 145 15% 90%;
+
+    --popover: 150 15% 10%;
+    --popover-foreground: 145 15% 90%;
+
+    --primary: 145 25% 45%; /* Mid-tone Sage Green */
+    --primary-foreground: 150 15% 8%;
+
+    --secondary: 270 10% 16%;
+    --secondary-foreground: 145 15% 90%;
+
+    --muted: 150 10% 16%;
+    --muted-foreground: 150 10% 60%;
+
+    --accent: 270 10% 16%;
+    --accent-foreground: 145 15% 90%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 10% 16%;
+    --input: 150 10% 16%;
+    --ring: 145 25% 45%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(145, 22%, 35%, 0.04) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(270, 12%, 93%, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, hsla(33, 30%, 97%, 0.08) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4, .serif-heading {
+    font-family: var(--font-serif);
+    @apply tracking-wide font-light;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Custom styles for calming UI widgets */
+.mood-ring-pulse {
+  box-shadow: 0 0 0 0 rgba(70, 107, 87, 0.4);
+  animation: pulse-ring 3s cubic-bezier(0.66, 0, 0, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  to {
+    box-shadow: 0 0 0 30px rgba(70, 107, 87, 0);
   }
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.dark .glass {
+  background: rgba(16, 20, 18, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
