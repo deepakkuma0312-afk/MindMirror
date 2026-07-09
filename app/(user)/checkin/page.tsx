@@ -173,7 +173,7 @@ export default function CheckinPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto h-[calc(100vh-8rem)] flex flex-col justify-between font-sans relative">
+    <div className="max-w-3xl mx-auto h-[calc(100vh-12rem)] lg:h-[calc(100vh-8rem)] flex flex-col justify-between font-sans relative">
       
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-stone-200/60 pb-4 mb-4">
@@ -192,8 +192,8 @@ export default function CheckinPage() {
 
       {/* Main Crisis Banner overlay */}
       {isCrisis && (
-        <div className="absolute inset-0 bg-white/95 backdrop-blur-md rounded-2xl p-8 flex flex-col items-center justify-center text-center space-y-6 z-40 border-2 border-red-100 shadow-2xl">
-          <div className="h-16 w-16 bg-red-50 border border-red-200 rounded-full flex items-center justify-center text-red-600">
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-start sm:justify-center text-center space-y-6 z-40 border-2 border-red-100 shadow-2xl overflow-y-auto">
+          <div className="h-16 w-16 bg-red-50 border border-red-200 rounded-full flex items-center justify-center text-red-600 shrink-0">
             <AlertCircle className="h-8 w-8 animate-pulse" />
           </div>
           <div className="space-y-2 max-w-md">

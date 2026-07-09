@@ -10,26 +10,46 @@ import {
   ClipboardList, 
   Settings, 
   LogOut, 
-  HeartHandshake
+  HeartHandshake,
+  Users,
+  Bell,
+  Activity,
+  X
 } from 'lucide-react';
 import { useTransition } from 'react';
 
 interface SidebarProps {
   userName?: string;
   email?: string;
+  isTherapist?: boolean;
+  onCloseMobile?: () => void;
 }
 
-export default function Sidebar({ userName = 'Priya', email }: SidebarProps) {
+interface MenuItem {
+  name: string;
+  href: string;
+  icon: any;
+  badge?: string;
+}
+
+export default function Sidebar({ userName = 'User', email, isTherapist = false, onCloseMobile }: SidebarProps) {
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
-  const menuItems = [
+  const patientMenu: MenuItem[] = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'AI Check-in', href: '/checkin', icon: MessageSquareHeart, badge: 'Daily' },
     { name: 'Reflection Journal', href: '/journal', icon: BookOpen },
     { name: 'Assessments', href: '/assessments', icon: ClipboardList },
     { name: 'Settings & Sharing', href: '/settings', icon: Settings },
   ];
+
+  const therapistMenu: MenuItem[] = [
+    { name: 'Patient Directory', href: '/therapist/dashboard', icon: Users },
+    { name: 'Warning Alerts', href: '/therapist/alerts', icon: Bell },
+  ];
+
+  const menuItems = isTherapist ? therapistMenu : patientMenu;
 
   const handleLogout = () => {
     startTransition(async () => {
@@ -38,38 +58,65 @@ export default function Sidebar({ userName = 'Priya', email }: SidebarProps) {
   };
 
   return (
-    <aside className="w-80 h-screen bg-white/70 backdrop-blur-md border-r border-stone-200/60 p-6 flex flex-col justify-between font-sans fixed left-0 top-0 z-30">
+    <aside className="w-full h-full bg-white/80 backdrop-blur-md border-r border-stone-200/60 p-6 flex flex-col justify-between font-sans">
       <div className="space-y-8">
-        {/* Brand */}
-        <div className="flex items-center gap-3 px-2">
-          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/20">
-            <HeartHandshake className="h-5 w-5" />
+        {/* Brand & Mobile Close button */}
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center gap-3">
+            {isTherapist ? (
+              <div className="h-10 w-10 rounded-xl bg-purple-600 flex items-center justify-center text-white shadow-md shadow-purple-600/20">
+                <Activity className="h-5 w-5" />
+              </div>
+            ) : (
+              <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-md shadow-primary/20">
+                <HeartHandshake className="h-5 w-5" />
+              </div>
+            )}
+            <div>
+              <h2 className="text-xl font-serif text-stone-800 leading-tight font-semibold">
+                {isTherapist ? 'MirrorCare' : 'MindMirror'}
+              </h2>
+              <span className={`text-[10px] uppercase font-bold tracking-widest ${
+                isTherapist ? 'text-purple-600/70' : 'text-primary/70'
+              }`}>
+                {isTherapist ? 'Clinician Portal' : 'Continuous Care'}
+              </span>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-serif text-stone-800 leading-tight">MindMirror</h2>
-            <span className="text-[10px] uppercase font-bold text-primary/70 tracking-widest">
-              Continuous Care
-            </span>
-          </div>
+          {/* Close button for mobile */}
+          {onCloseMobile && (
+            <button
+              onClick={onCloseMobile}
+              className="lg:hidden p-2 rounded-lg hover:bg-stone-100 text-stone-500 cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
 
         {/* Navigation */}
         <nav className="space-y-1.5">
           {menuItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isItemActive = pathname === item.href || (isTherapist && pathname.startsWith(item.href) && item.href !== '/therapist/dashboard' && item.href === '/therapist/dashboard');
+            const isActive = isItemActive || (pathname.startsWith(item.href) && item.href !== '/therapist/dashboard' && item.href !== '/dashboard');
             const Icon = item.icon;
             return (
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={onCloseMobile}
                 className={`flex items-center justify-between px-4 py-3.5 rounded-xl text-sm font-medium transition-all group ${
                   isActive
-                    ? 'bg-primary text-white shadow-md shadow-primary/10'
+                    ? isTherapist 
+                      ? 'bg-purple-600 text-white shadow-md shadow-purple-600/10'
+                      : 'bg-primary text-white shadow-md shadow-primary/10'
                     : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={`h-4.5 w-4.5 transition-transform group-hover:scale-110 ${isActive ? 'text-white' : 'text-stone-400'}`} />
+                  <Icon className={`h-4.5 w-4.5 transition-transform group-hover:scale-110 ${
+                    isActive ? 'text-white' : 'text-stone-400'
+                  }`} />
                   <span>{item.name}</span>
                 </div>
                 {item.badge && (
@@ -88,10 +135,14 @@ export default function Sidebar({ userName = 'Priya', email }: SidebarProps) {
       {/* User profile & Logout */}
       <div className="border-t border-stone-200/60 pt-6 space-y-4">
         <div className="flex items-center gap-3 px-2">
-          <div className="h-10 w-10 rounded-full bg-gradient-to-tr from-emerald-100 to-purple-100 border border-stone-100 flex items-center justify-center font-bold text-primary">
-            {userName.charAt(0)}
+          <div className={`h-10 w-10 rounded-full border border-stone-100 flex items-center justify-center font-bold ${
+            isTherapist 
+              ? 'bg-gradient-to-tr from-purple-100 to-indigo-100 text-purple-700'
+              : 'bg-gradient-to-tr from-emerald-100 to-purple-100 text-primary'
+          }`}>
+            {userName.charAt(0).toUpperCase()}
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-stone-800 truncate">{userName}</p>
             <p className="text-xs text-stone-400 truncate">{email}</p>
           </div>

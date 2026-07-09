@@ -1,6 +1,6 @@
 import { getSessionUser } from '@/lib/auth/appwrite';
 import { getUser } from '@/lib/db/dbHelper';
-import Sidebar from '@/components/shared/Sidebar';
+import ResponsiveLayout from '@/components/shared/ResponsiveLayout';
 import { redirect } from 'next/navigation';
 
 export const revalidate = 0;
@@ -20,16 +20,8 @@ export default async function PatientLayout({
   const name = profile?.name || 'User';
 
   return (
-    <div className="min-h-screen bg-stone-50/50 flex">
-      {/* Fixed Sidebar */}
-      <Sidebar userName={name} email={sessionUser.email} />
-
-      {/* Main Content Area */}
-      <div className="flex-1 pl-80 min-h-screen flex flex-col">
-        <div className="flex-1 p-8 max-w-7xl w-full mx-auto">
-          {children}
-        </div>
-      </div>
-    </div>
+    <ResponsiveLayout userName={name} email={sessionUser.email} isTherapist={false}>
+      {children}
+    </ResponsiveLayout>
   );
 }

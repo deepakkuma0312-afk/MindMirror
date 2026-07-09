@@ -24,12 +24,16 @@ export function encrypt(text: string): string {
 
 export function decrypt(encryptedText: string): string {
   if (!encryptedText) return '';
-  // If it's not in the iv:encrypted format, return as is (plain text fallback)
-  if (!encryptedText.includes(':')) return encryptedText;
+  
+  // A valid IV hex string for aes-256-cbc must be exactly 32 hex characters (16 bytes)
+  const parts = encryptedText.split(':');
+  if (parts.length !== 2 || parts[0].length !== 32 || !/^[0-9a-fA-F]+$/.test(parts[0])) {
+    return encryptedText;
+  }
 
   try {
-    const [ivHex, encrypted] = encryptedText.split(':');
-    const iv = Buffer.from(ivHex, 'hex');
+    const iv = Buffer.from(parts[0], 'hex');
+    const encrypted = parts[1];
     const decipher = crypto.createDecipheriv('aes-256-cbc', getKeyBuffer(), iv);
     let decrypted = decipher.update(encrypted, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
