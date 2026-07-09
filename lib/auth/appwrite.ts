@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 // Admin Client (for backend queries and database modifications)
 export async function createAdminClient() {
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+    .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
     .setProject(process.env.APPWRITE_PROJECT_ID || '')
     .setKey(process.env.APPWRITE_API_KEY || '');
 
@@ -24,7 +24,7 @@ export async function createAdminClient() {
 // Session Client (for requests authenticated as the logged-in user)
 export async function createSessionClient() {
   const client = new Client()
-    .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+    .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
     .setProject(process.env.APPWRITE_PROJECT_ID || '');
 
   const cookieStore = await cookies();

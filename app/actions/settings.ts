@@ -49,7 +49,7 @@ export async function deleteUserDataAction() {
 
   try {
     const client = new Client()
-      .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
       .setProject(process.env.APPWRITE_PROJECT_ID || '')
       .setKey(process.env.APPWRITE_API_KEY || '');
     const databases = new Databases(client);
@@ -69,16 +69,24 @@ export async function deleteUserDataAction() {
       }
     };
 
-    await deleteUserDocs(process.env.APPWRITE_MOOD_ENTRIES_COLLECTION_ID!);
-    await deleteUserDocs(process.env.APPWRITE_ASSESSMENTS_COLLECTION_ID!);
-    await deleteUserDocs(process.env.APPWRITE_AI_CONVERSATIONS_COLLECTION_ID!);
-    await deleteUserDocs(process.env.APPWRITE_INSIGHTS_COLLECTION_ID!);
-    await deleteUserDocs(process.env.APPWRITE_ALERTS_COLLECTION_ID!);
-    await deleteUserDocs(process.env.APPWRITE_THERAPIST_LINKS_COLLECTION_ID!);
+    const moodEntriesColl = process.env.APPWRITE_MOOD_ENTRIES_TABLE_ID || process.env.APPWRITE_MOOD_ENTRIES_COLLECTION_ID;
+    const assessmentsColl = process.env.APPWRITE_ASSESSMENTS_TABLE_ID || process.env.APPWRITE_ASSESSMENTS_COLLECTION_ID;
+    const aiConversationsColl = process.env.APPWRITE_AI_CONVERSATIONS_TABLE_ID || process.env.APPWRITE_AI_CONVERSATIONS_COLLECTION_ID;
+    const insightsColl = process.env.APPWRITE_INSIGHTS_TABLE_ID || process.env.APPWRITE_INSIGHTS_COLLECTION_ID;
+    const alertsColl = process.env.APPWRITE_ALERTS_TABLE_ID || process.env.APPWRITE_ALERTS_COLLECTION_ID;
+    const therapistLinksColl = process.env.APPWRITE_THERAPIST_LINKS_TABLE_ID || process.env.APPWRITE_THERAPIST_LINKS_COLLECTION_ID;
+    const usersColl = process.env.APPWRITE_USERS_TABLE_ID || process.env.APPWRITE_USERS_COLLECTION_ID;
+
+    await deleteUserDocs(moodEntriesColl!);
+    await deleteUserDocs(assessmentsColl!);
+    await deleteUserDocs(aiConversationsColl!);
+    await deleteUserDocs(insightsColl!);
+    await deleteUserDocs(alertsColl!);
+    await deleteUserDocs(therapistLinksColl!);
 
     // Delete user document in users collection
     try {
-      await databases.deleteDocument(databaseId, process.env.APPWRITE_USERS_COLLECTION_ID!, user.id);
+      await databases.deleteDocument(databaseId, usersColl!, user.id);
     } catch (e) {
       console.error('Appwrite delete user doc failed:', e);
     }

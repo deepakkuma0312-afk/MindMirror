@@ -87,20 +87,20 @@ export interface TherapistLink {
 
 // Appwrite Databases client instantiation
 const client = new Client()
-  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+  .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1')
   .setProject(process.env.APPWRITE_PROJECT_ID || '')
   .setKey(process.env.APPWRITE_API_KEY || '');
 
 const appwriteDatabases = new Databases(client);
 
 const databaseId = process.env.APPWRITE_DATABASE_ID || '';
-const usersCollectionId = process.env.APPWRITE_USERS_COLLECTION_ID || '';
-const moodEntriesCollectionId = process.env.APPWRITE_MOOD_ENTRIES_COLLECTION_ID || '';
-const aiConversationsCollectionId = process.env.APPWRITE_AI_CONVERSATIONS_COLLECTION_ID || '';
-const assessmentsCollectionId = process.env.APPWRITE_ASSESSMENTS_COLLECTION_ID || '';
-const insightsCollectionId = process.env.APPWRITE_INSIGHTS_COLLECTION_ID || '';
-const alertsCollectionId = process.env.APPWRITE_ALERTS_COLLECTION_ID || '';
-const therapistLinksCollectionId = process.env.APPWRITE_THERAPIST_LINKS_COLLECTION_ID || '';
+const usersCollectionId = process.env.APPWRITE_USERS_TABLE_ID || process.env.APPWRITE_USERS_COLLECTION_ID || '';
+const moodEntriesCollectionId = process.env.APPWRITE_MOOD_ENTRIES_TABLE_ID || process.env.APPWRITE_MOOD_ENTRIES_COLLECTION_ID || '';
+const aiConversationsCollectionId = process.env.APPWRITE_AI_CONVERSATIONS_TABLE_ID || process.env.APPWRITE_AI_CONVERSATIONS_COLLECTION_ID || '';
+const assessmentsCollectionId = process.env.APPWRITE_ASSESSMENTS_TABLE_ID || process.env.APPWRITE_ASSESSMENTS_COLLECTION_ID || '';
+const insightsCollectionId = process.env.APPWRITE_INSIGHTS_TABLE_ID || process.env.APPWRITE_INSIGHTS_COLLECTION_ID || '';
+const alertsCollectionId = process.env.APPWRITE_ALERTS_TABLE_ID || process.env.APPWRITE_ALERTS_COLLECTION_ID || '';
+const therapistLinksCollectionId = process.env.APPWRITE_THERAPIST_LINKS_TABLE_ID || process.env.APPWRITE_THERAPIST_LINKS_COLLECTION_ID || '';
 
 // Appwrite mapper helpers
 const mapUserDoc = (doc: any): User => ({
