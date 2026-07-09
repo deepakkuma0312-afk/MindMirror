@@ -25,18 +25,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isAppwriteConfigured = !!(
-    process.env.APPWRITE_ENDPOINT &&
-    process.env.APPWRITE_PROJECT_ID &&
-    process.env.APPWRITE_DATABASE_ID &&
-    process.env.APPWRITE_API_KEY
-  );
-
   // Get session status from cookies
-  // Supports both Appwrite token cookies and our local session cookie
-  const mockSession = request.cookies.get('mindmirror-session')?.value;
-  const appwriteSession = isAppwriteConfigured && request.cookies.get('appwrite-session')?.value;
-  const hasSession = !!(mockSession || appwriteSession);
+  const appwriteSession = request.cookies.get('appwrite-session')?.value;
+  const hasSession = !!appwriteSession;
 
   // If no session and trying to access protected content
   if (!hasSession) {

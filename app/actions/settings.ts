@@ -1,13 +1,12 @@
 'use strict';
 'use server';
 
-import { getSessionUser, isAppwriteConfigured, createAdminClient } from '@/lib/auth/appwrite';
+import { getSessionUser, createAdminClient } from '@/lib/auth/appwrite';
 import { getUserByEmail, updateUser, createTherapistLink } from '@/lib/db/dbHelper';
-import { getMockData, writeMockData } from '@/lib/db/index';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { Client, TablesDB, Query } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 export async function linkTherapistAction(formData: FormData) {
   const user = await getSessionUser();
@@ -49,68 +48,49 @@ export async function deleteUserDataAction() {
   }
 
   try {
-    if (isAppwriteConfigured) {
-      const client = new Client()
-        .setEndpoint(process.env.APPWRITE_ENDPOINT!)
-        .setProject(process.env.APPWRITE_PROJECT_ID!)
-        .setKey(process.env.APPWRITE_API_KEY!);
-      const tablesDB = new TablesDB(client);
-      const databaseId = process.env.APPWRITE_DATABASE_ID!;
+    const client = new Client()
+      .setEndpoint(process.env.APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1')
+      .setProject(process.env.APPWRITE_PROJECT_ID || '')
+      .setKey(process.env.APPWRITE_API_KEY || '');
+    const databases = new Databases(client);
+    const databaseId = process.env.APPWRITE_DATABASE_ID!;
 
-      const deleteUserDocs = async (tableId: string) => {
-        try {
-          const list = await tablesDB.listRows({
-            databaseId,
-            tableId,
-            queries: [
-              Query.equal('userId', user.id),
-              Query.limit(100),
-            ],
-          });
-          for (const row of list.rows) {
-            await tablesDB.deleteRow({ databaseId, tableId, rowId: row.$id });
-          }
-        } catch (e) {
-          console.error(`Appwrite delete rows failed for table ${tableId}:`, e);
-        }
-      };
-
-      await deleteUserDocs(process.env.APPWRITE_MOOD_ENTRIES_TABLE_ID!);
-      await deleteUserDocs(process.env.APPWRITE_ASSESSMENTS_TABLE_ID!);
-      await deleteUserDocs(process.env.APPWRITE_AI_CONVERSATIONS_TABLE_ID!);
-      await deleteUserDocs(process.env.APPWRITE_INSIGHTS_TABLE_ID!);
-      await deleteUserDocs(process.env.APPWRITE_ALERTS_TABLE_ID!);
-      await deleteUserDocs(process.env.APPWRITE_THERAPIST_LINKS_TABLE_ID!);
-
-      // Delete user document in users table
+    const deleteUserDocs = async (collectionId: string) => {
       try {
-        await tablesDB.deleteRow({ databaseId, tableId: process.env.APPWRITE_USERS_TABLE_ID!, rowId: user.id });
-      } catch (e) {
-        console.error('Appwrite delete user doc failed:', e);
-      }
-
-      // Delete Auth account
-      const admin = await createAdminClient();
-      if (admin) {
-        try {
-          await admin.users.delete(user.id);
-        } catch (e) {
-          console.error('Appwrite delete auth user failed:', e);
+        const list = await databases.listDocuments(databaseId, collectionId, [
+          Query.equal('userId', user.id),
+          Query.limit(100),
+        ]);
+        for (const doc of list.documents) {
+          await databases.deleteDocument(databaseId, collectionId, doc.$id);
         }
+      } catch (e) {
+        console.error(`Appwrite delete documents failed for collection ${collectionId}:`, e);
       }
-    } else {
-      // Mock db clean up
-      const data = getMockData();
-      
-      data.users = data.users.filter((u: any) => u.id !== user.id);
-      data.moodEntries = data.moodEntries.filter((m: any) => m.userId !== user.id);
-      data.assessments = data.assessments.filter((a: any) => a.userId !== user.id);
-      data.aiConversations = data.aiConversations.filter((c: any) => c.userId !== user.id);
-      data.insights = data.insights.filter((i: any) => i.userId !== user.id);
-      data.alerts = data.alerts.filter((a: any) => a.userId !== user.id);
-      data.therapistLinks = data.therapistLinks.filter((l: any) => l.userId !== user.id);
+    };
 
-      writeMockData(data);
+    await deleteUserDocs(process.env.APPWRITE_MOOD_ENTRIES_COLLECTION_ID!);
+    await deleteUserDocs(process.env.APPWRITE_ASSESSMENTS_COLLECTION_ID!);
+    await deleteUserDocs(process.env.APPWRITE_AI_CONVERSATIONS_COLLECTION_ID!);
+    await deleteUserDocs(process.env.APPWRITE_INSIGHTS_COLLECTION_ID!);
+    await deleteUserDocs(process.env.APPWRITE_ALERTS_COLLECTION_ID!);
+    await deleteUserDocs(process.env.APPWRITE_THERAPIST_LINKS_COLLECTION_ID!);
+
+    // Delete user document in users collection
+    try {
+      await databases.deleteDocument(databaseId, process.env.APPWRITE_USERS_COLLECTION_ID!, user.id);
+    } catch (e) {
+      console.error('Appwrite delete user doc failed:', e);
+    }
+
+    // Delete Auth account
+    const admin = await createAdminClient();
+    if (admin) {
+      try {
+        await admin.users.delete(user.id);
+      } catch (e) {
+        console.error('Appwrite delete auth user failed:', e);
+      }
     }
 
     // Clear authentication cookies
